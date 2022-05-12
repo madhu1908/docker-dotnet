@@ -1,0 +1,249 @@
+USE [master]
+GO
+/****** Object:  Database [collegeregistraion]    Script Date: 10-05-2022 13:01:46 ******/
+CREATE DATABASE [collegeregistraion]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'collegeregistraion', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\collegeregistraion.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'collegeregistraion_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\collegeregistraion_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
+GO
+ALTER DATABASE [collegeregistraion] SET COMPATIBILITY_LEVEL = 150
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [collegeregistraion].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [collegeregistraion] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [collegeregistraion] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [collegeregistraion] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [collegeregistraion] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [collegeregistraion] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [collegeregistraion] SET  MULTI_USER 
+GO
+ALTER DATABASE [collegeregistraion] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [collegeregistraion] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [collegeregistraion] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [collegeregistraion] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [collegeregistraion] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [collegeregistraion] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [collegeregistraion] SET QUERY_STORE = OFF
+GO
+USE [collegeregistraion]
+GO
+/****** Object:  User [NT AUTHORITY\SYSTEM]    Script Date: 10-05-2022 13:01:47 ******/
+CREATE USER [NT AUTHORITY\SYSTEM] FOR LOGIN [NT AUTHORITY\SYSTEM] WITH DEFAULT_SCHEMA=[dbo]
+GO
+ALTER ROLE [db_owner] ADD MEMBER [NT AUTHORITY\SYSTEM]
+GO
+ALTER ROLE [db_accessadmin] ADD MEMBER [NT AUTHORITY\SYSTEM]
+GO
+ALTER ROLE [db_securityadmin] ADD MEMBER [NT AUTHORITY\SYSTEM]
+GO
+ALTER ROLE [db_ddladmin] ADD MEMBER [NT AUTHORITY\SYSTEM]
+GO
+ALTER ROLE [db_backupoperator] ADD MEMBER [NT AUTHORITY\SYSTEM]
+GO
+ALTER ROLE [db_datareader] ADD MEMBER [NT AUTHORITY\SYSTEM]
+GO
+ALTER ROLE [db_datawriter] ADD MEMBER [NT AUTHORITY\SYSTEM]
+GO
+/****** Object:  Table [dbo].[catchings]    Script Date: 10-05-2022 13:01:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[catchings](
+	[catchid] [int] IDENTITY(1,1) NOT NULL,
+	[catchname] [varchar](250) NULL,
+ CONSTRAINT [PK_catchings] PRIMARY KEY CLUSTERED 
+(
+	[catchid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Departments]    Script Date: 10-05-2022 13:01:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Departments](
+	[DepartmentId] [int] IDENTITY(1,1) NOT NULL,
+	[DepartmentName] [nvarchar](50) NULL,
+	[CreatedBy] [nvarchar](50) NULL,
+	[CreatedTimestamp] [datetime] NULL,
+	[UpdatedTimestamp] [datetime] NULL,
+	[UpdatedBy] [nvarchar](50) NULL,
+ CONSTRAINT [PK_Departments] PRIMARY KEY CLUSTERED 
+(
+	[DepartmentId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[employee_registration]    Script Date: 10-05-2022 13:01:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[employee_registration](
+	[employeeid] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](50) NULL,
+	[workemail] [varchar](50) NULL,
+	[Mobilenumber] [varchar](50) NULL,
+	[collegeName] [varchar](50) NULL,
+	[department] [varchar](50) NULL,
+	[location] [varchar](50) NULL,
+	[year] [varchar](50) NULL,
+	[Address] [varchar](250) NULL,
+	[Resume] [nvarchar](max) NULL,
+	[status] [varchar](250) NULL,
+	[CreatedTimestamp] [datetime] NULL,
+ CONSTRAINT [PK_employee_registration] PRIMARY KEY CLUSTERED 
+(
+	[employeeid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[orgTree]    Script Date: 10-05-2022 13:01:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[orgTree](
+	[id] [int] NOT NULL,
+	[Name] [varchar](50) NULL,
+	[resportingTo] [int] NULL,
+ CONSTRAINT [PK_orgTree] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Passedoutyear]    Script Date: 10-05-2022 13:01:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Passedoutyear](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[passedoutyear] [nvarchar](50) NULL,
+	[CreatedBy] [nvarchar](50) NULL,
+	[CreatedTimestamp] [datetime] NULL,
+	[UpdatedTimestamp] [datetime] NULL,
+	[UpdatedBy] [nvarchar](50) NULL,
+ CONSTRAINT [PK_Passedoutyear] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[RapidDataUsers]    Script Date: 10-05-2022 13:01:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[RapidDataUsers](
+	[UserName] [nvarchar](50) NULL,
+	[UserId] [int] IDENTITY(1,1) NOT NULL,
+	[Department] [nvarchar](250) NULL,
+	[Password] [nvarchar](max) NULL,
+	[CreadtedTimestamp] [datetime] NULL,
+	[updatedTimestamp] [datetime] NULL,
+	[UpdatedBy] [nvarchar](50) NULL,
+	[CreatedBy] [nvarchar](50) NULL,
+	[RoleName] [nvarchar](50) NULL,
+	[phoneNumber] [varchar](50) NULL,
+ CONSTRAINT [PK_RapidDataUsers] PRIMARY KEY CLUSTERED 
+(
+	[UserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Role]    Script Date: 10-05-2022 13:01:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Role](
+	[RoleId] [int] IDENTITY(1,1) NOT NULL,
+	[RoleName] [nvarchar](50) NULL,
+	[CreatedTimestamp] [datetime] NULL,
+	[modifiedTimestamp] [datetime] NULL,
+	[CreatedBy] [nvarchar](50) NULL,
+	[UpdatedBy] [nvarchar](50) NULL,
+	[UserId] [int] NULL,
+ CONSTRAINT [PK_Role] PRIMARY KEY CLUSTERED 
+(
+	[RoleId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[UserRoleMapping]    Script Date: 10-05-2022 13:01:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[UserRoleMapping](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[RoleId] [int] NULL,
+	[UserId] [int] NULL,
+	[CreatedTimestamp] [datetime] NULL,
+ CONSTRAINT [PK_UserRoleMapping] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+USE [master]
+GO
+ALTER DATABASE [collegeregistraion] SET  READ_WRITE 
+GO

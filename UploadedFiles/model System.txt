@@ -1,0 +1,287 @@
+@model System.Data.DataTable
+
+@{
+    ViewBag.Title = "Rapid Skote";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.pTitle = " Teammates / Performance";
+    ViewBag.pageTitle = "Appraisee View";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <style>
+
+        .mat_design{
+            background:none;
+            box-shadow:none;
+        }
+        select {
+            word-wrap: normal;
+            border-bottom: 1px solid #6311e0;
+            border-top: 0px;
+            border-left: 0px;
+            border-right: 0px;
+        }
+
+            select:focus {
+                outline: none;
+                border-bottom: 1px solid #6311e0;
+                border-top: 0px;
+                border-left: 0px;
+                border-right: 0px;
+            }
+
+        .form-control {
+            display: inline !important;
+           
+        }
+
+        .pos {
+            position: relative;
+        }
+
+            .pos span {
+                position: absolute;
+                z-index: 10;
+                font-size: 16px;
+                line-height: 38px;
+                left: 23px;
+                color: #74788d;
+                top: 0px;
+            }
+
+            .pos .form-control {
+                border: none !important;
+                height: 38px !important;
+                padding-left: 40px !important;
+                padding-right: 20px !important;
+                background-color: #f3f3f9 !important;
+                -webkit-box-shadow: none !important;
+                box-shadow: none !important;
+                border-radius: 30px !important;
+            }
+
+        .h4 {
+            color: #495057;
+            font-size: 1.5rem;
+            margin-bottom: .5rem;
+            padding: .5rem;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+    </style>
+</head>
+<body>
+    <div class="mat_design">
+        <div class="card">
+            <div class="card-body">
+                <div class="row d-flex justify-content-between" >
+                    <span class="text-dark h4 ">Appraisee List</span>
+                    <span class="col pos col-md-4">
+                        <input type="text" class="form-control" id="search" placeholder="Search..." autocomplete="off">
+                        <span class="bx bx-search-alt"></span>
+                    </span>
+                    <span class="m-2">
+                        <select id="sorttable" onchange="sorttable()">
+                            <option>Sort By</option>
+                            <option value="asc">Employee Asc</option>
+                            <option value="desc">Employee Desc</option>
+                            @*<option value="pub">Published</option>
+                <option value="npub">Not Published</option>*@
+                        </select>
+                    </span>
+                    <span class="">
+                        <button class="btn btn-warning"><i class="fa fa-upload"></i>&nbsp;&nbsp;Export</button>
+                    </span>
+                </div>
+
+                <!--<div class="">
+                    <span class="text-secondary h4 mr-2">Appraisee List</span>
+                    <span class="app-search pos ml-2 mr-2">
+                        <input type="text" class="form-control" id="search" placeholder="Search..." autocomplete="off">
+                        <span class="bx bx-search-alt"></span>
+                    </span>
+                    <span class="ml-2">
+                        <select id="sorttable" onchange="sorttable()">
+                            <option>Sort By</option>
+                            <option value="asc">Employee Asc</option>
+                            <option value="desc">Employee Desc</option>-->
+                            @*<option value="pub">Published</option>
+                                <option value="npub">Not Published</option>*@
+                        <!--</select>
+                    </span>
+                    <span class="ml-2">
+                        <button class="btn btn-warning"><i class="fa fa-upload"></i>&nbsp;&nbsp;Export</button>
+                    </span>
+                </div>-->
+                <hr />
+                <div class="">
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-striped table-hover aftersort">
+                            <thead>
+                                @if (Session["Admin"].ToString() == "Super Admin" || Session["Admin"].ToString() == "Admin")
+                                {
+                                    <th>Appraisal Name</th>
+                                }
+                                <th>Employee</th>
+                                <th>Rating</th>
+                                <th>Review Status</th>
+                                <th class="text-center">Publish Status</th>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Rows.Count; i++)
+                                {
+                                <tr>
+                                    @if (Session["Admin"].ToString() == "Super Admin" || Session["Admin"].ToString() == "Admin")
+                                    {
+                                        <td>@Model.Rows[i][5]</td>
+                                    }
+                                    <td>
+                                        <a href="@Url.Action("appraiseeIndex", "Performance", new { @emp = Model.Rows[i][1], @aeid = Model.Rows[i][0] })" class="">
+                                            @Model.Rows[i][1]
+                                        </a>
+                                    </td>
+                                    <td>@Model.Rows[i][2]</td>
+                                    <td>@Model.Rows[i][3]</td>
+                                    <td class="text-center">
+                                        @if (Model.Rows[i][4].ToString() == "Published")
+                                        {
+                                            <span class="text-capitalize text-success font-size-16" style="font-weight: 500;">published</span>
+                                        }
+                                        else
+                                        {
+                                            <span id="publish-btn" style="cursor: pointer;" class="btn btn-info publish-btn publisher" data-toggle="tooltip" data-placement="right" title="Publish">
+                                                <input type="hidden" value="@Model.Rows[i][0]" id="publish_id" />
+                                                <i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Publish
+                                     
+                                        </span>
+                                        //<span style="cursor: pointer;" onclick="publishReview()" class="btn btn-info publish-btn">  <input type="hidden" value="@Model.Rows[i][0]" id="review_data" /><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Publish</span>
+                                    }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <script>
+        function sorttable() {
+            var sortbyval = $('#sorttable').val();
+            if (sortbyval != "Sort By") {
+                $.ajax({
+                    url: "/Performance/filterAppraiseeView",
+                    data: { sortby: sortbyval },
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    method: 'get',
+                    success: function (data) {
+                        var apptable = $('.aftersort tbody');
+                        apptable.empty();
+                        var rows, index = 1;
+                        $(data.app).each(function (index, item) {
+                            if (item.publish_status == "Not Publish") {
+                                rows += '<tr><td>' + item.appraiseename + '</td><td><a href="/Performance/appraiseeIndex?emp=' + item.employee + '&aeid=' + item.appraisal_employee_id + '" class="">' + item.employee + '</a></td><td>' + item.rating + '</td><td>' + item.review_status1 + '</td><td><span id="publish-btn" style="cursor: pointer;" class="btn btn-info publish-btn publisher" data-toggle="tooltip" data-placement="right" title="Publish"><input type="hidden" value="' + item.appraisal_employee_id + '" id="publish_id" /><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Publish</span></td></tr>';
+                            }
+                            else {
+                                rows += '<tr><td>' + item.appraiseename + '</td><td><a href="/Performance/appraiseeIndex?emp=' + item.employee + '&aeid=' + item.appraisal_employee_id + '" class="">' + item.employee + '</a></td><td>' + item.rating + '</td><td>' + item.review_status1 + '</td><td><span class="text-capitalize text-success font-size-16" style="font-weight: 500;">published</span></td></tr>';
+                            }
+
+                        });
+                        apptable.append(rows);
+                    }
+                });
+            }
+            else {
+                window.location.reload();
+            }
+        }
+        $('.publisher').on('click', function ( ) {
+            var recid = $(this).closest('tr').find('#publish_id').val();
+            Swal.fire({
+                title: 'Publish Review?',
+                text: "After publishing the review is visible to the appraisee!",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '<i class="fa fa-paper-plane"></i>&nbsp;Publish'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/Performance/publishAppraisalReview",
+                        method: "get",
+                        data: { id: recid },
+                        contentType: "application/json; charset=utf-8",
+                        success: function () {
+                            swal("Review Published", "Now Review is visible to the appraisee!", "success");
+                            setTimeout(function () {
+                                swal.close(); setTimeout(function () { window.location.reload(); }, 500)
+                            }, 1000);
+                        },
+                        failure: function () {
+                            swal("Error", "Something went wrong please try again!", "error");
+                            setTimeout(function () {
+                                swal.close(); setTimeout(function () { window.location.reload(); }, 500)
+                            }, 1000);
+                        }
+                    });
+                }
+            })
+        });
+        $('#search').on('focus', function () {
+            var searchbar = document.getElementById('search');
+            searchbar.addEventListener("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    var content = $('#search').val();
+                    content = content.toLowerCase();
+                    if (content.includes("employee:") || content.includes("rating:") || content.includes("status:")) {
+                        $.ajax({
+                            url: "/Performance/AppraiseeViewSearch",
+                            method: "get",
+                            data: { search: content },
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (data) {
+                                var appemptable = $('.aftersort tbody');
+                                appemptable.empty();
+                                var rows, index = 1;
+                                $(data.app).each(function (index, item) {
+                                    rows += '<tr>'
+                                        + '<td>'
+                                        + '<a href="/Performance/appraiseeIndex?emp=' + item.employee + '&aeid=' + item.appraisal_employee_id + '" class="">' + item.employee + '</a>'
+                                        + '</td>'
+                                        + '<td>' + item.rating + '</td>'
+                                        + '<td>' + item.review_status1 + '</td>'
+                                        + '<td>'
+                                        + '<a href="/Performance/publishAppraisalReview/' + item.appraisal_employee_id + '" class=" btn btn-info"><i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Publish</a>'
+                                        + '</td>'
+                                        + '</tr>';
+                                });
+                                appemptable.append(rows);
+                            }
+                        });
+                    }
+                    else {
+                        swal("Invalid Search", "Please try again!", "error");
+                        setTimeout(function () { swal.close(); }, 1000);
+                    }
+                }
+            });
+        });
+       
+    </script>
+}

@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewBag.Title = "departIndexpage";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+@if (Convert.ToBoolean((Session["RoleName"].ToString()) == "SuperAdmin"))
+{<a class="btn btn-success" style="margin-bottom:10px" href="@Url.Action("createOrEditDepartment", "Admin")"><i class="fa fa-plus"></i> Add New</a>}
+<table id="employeeTable" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>Department Name</th>
+            <th>CreatedBy</th>
+            <th>Creadted Time</th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+
+@section scripts{
+    <script src="~/Scripts/jquery.js"></script>
+    <script src="~/Scripts/jquerydatatable.js"></script>
+    <script src="~/Scripts/dataTables.buttons.min.js"></script>
+    <script src="~/Scripts/jszip.min.js"></script>
+    <script src="~/Scripts/pdfmake.min.js"></script>
+    <script src="~/Scripts/vfs_fonts.js"></script>
+    <script src="~/Scripts/buttons.html5.min.js"></script>
+    <script src="~/Scripts/buttons.print.min.js"></script>
+    <script href="https://cdn.datatables.net/buttons/2.2.2/js/buttons.colVis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <script>
+        var Popup, dataTable, rolename;
+        $(document).ready(function () {
+            // getfun();
+
+            dataTable = $("#employeeTable").DataTable({
+                "ajax": {
+                    "url": "/Admin/GetallDepartments",
+                    "type": "GET",
+                    "datatype": "json",
+
+                },
+
+                "columns": [
+                    { "data": "DepartmentName" },
+                    { "data": "CreatedBy" },
+                    {
+                        "data": "CreatedTimestamp",
+                        "render": function (data, type, row) {
+
+                            var startDate = moment(data).format('YYYY-MM-DD');;
+                            return startDate
+                        }
+                    },
+                    {
+                        "data": "DepartmentId",
+                        "defaultContent": "",
+                        "render": function (data, type, row, meta) {
+                            rolename = row["rolename"];
+                            if (rolename == 'SuperAdmin') {
+                                return "@if(Convert.ToBoolean((Session["RoleName"].ToString()) == "SuperAdmin")){<a class='btn btn-default btn-sm' href='@Url.Action("createOrEditDepartment", "Admin")/" + data + "')><i class='fa fa-pencil'></i> Edit</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete(" + data + ")><i class='fa fa-trash'></i> Delete</a>}";
+                            } else {
+                                dataTable.columns([3]).visible(false);
+                            }
+
+                        }
+
+
+                    },
+
+
+                ],
+
+                "language": {
+
+                    "emptyTable" : "No Employee found, Please click on <b>Add New</b> Button"
+                }
+            });
+        });
+
+         function Delete(id) {
+            debugger;
+            if(confirm('Are You Sure to Delete this Employee Record ?'))
+            {
+                $.ajax({
+                    type: "POST",
+                    url: '/Admin/delete',
+
+                    data: { table: 'Departments', idname: 'DepartmentId', id: id },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.success) {
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+                        }
+                    }
+
+                });
+            }
+        }
+    </script>
+}
+

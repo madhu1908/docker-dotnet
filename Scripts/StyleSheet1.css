@@ -1,0 +1,24 @@
+﻿.blink_me li{
+    animation: blinker 3s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+#demo {
+    text-align: center;
+    font-size: 28pt;
+    color: #fa062e;
+    font-weight: 700;
+    font-style: italic
+}
+
+@media(max-width:768px){
+    #demo{
+        font-size:10pt;
+
+    }
+}

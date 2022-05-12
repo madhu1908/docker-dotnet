@@ -1,0 +1,342 @@
+﻿@model webinar.Models.webinarRegistration
+
+@{ ViewBag.Title = "registration";
+    Layout = "~/Views/Shared/_layout.cshtml";
+    }
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>RapidData Technologies</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style type="text/css">
+        .form-controls {
+            border-radius: 0px;
+            padding: 15px;
+            border-color: #000000;
+            height: calc(1.5em + .75rem + 10px);
+            border-top: none;
+            border-left: none;
+            border-bottom: 1px solid black;
+            border-right: none;
+            height: 25px;
+            outline: none;
+            width: 100%
+        }
+
+        
+
+        label::after {
+            content: '*';
+            color: red;
+        }
+
+        label {
+            color: #001b40;
+            font-weight: 400;
+        }
+
+        .list-items li {
+            margin: 10px 0
+        }
+
+        body {
+            padding: 0;
+            background-color: #fff9e8;
+        }
+
+        .logo {
+            position: absolute;
+            top: 5%;
+            left: 3%;
+        }
+
+        select {
+            padding: 8px !important;
+            width: 100% !important;
+        }
+
+        #demo div {
+            background-color: #001b40;
+            display: inline-block;
+            padding: 50px 35px;
+        }
+
+            #demo div span {
+                margin: 10px;
+                padding: 15px;
+                color: #ffffff;
+                position: relative;
+                width: 100px
+            }
+
+                #demo div span:first-child {
+                    background-color: #fc0f58;
+                }
+
+                    #demo div span:first-child::after {
+                        content: 'Days';
+                        position: absolute;
+                        bottom: -20px;
+                        left: 0;
+                        right: 0;
+                        font-size: 10pt;
+                    }
+
+                #demo div span:nth-child(2) {
+                    background-color: #ffdb4a;
+                }
+
+                    #demo div span:nth-child(2)::after {
+                        content: 'Hours';
+                        position: absolute;
+                        bottom: -20px;
+                        left: 0;
+                        right: 0;
+                        font-size: 10pt;
+                    }
+
+                #demo div span:nth-child(3) {
+                    background-color: #24d0fd
+                }
+
+                    #demo div span:nth-child(3)::after {
+                        content: 'Minutes';
+                        position: absolute;
+                        bottom: -20px;
+                        left: 0;
+                        right: 0;
+                        font-size: 10pt;
+                    }
+
+                #demo div span:nth-child(4) {
+                    background-color: #37c876
+                }
+
+                    #demo div span:nth-child(4)::after {
+                        content: 'Seconds';
+                        position: absolute;
+                        bottom: -20px;
+                        left: 0;
+                        right: 0;
+                        font-size: 8pt;
+                    }
+
+        .text-danger {
+            font-size: 16px;
+        }
+    </style>
+
+
+    <link href="~/Scripts/StyleSheet1.css" rel="stylesheet" />
+
+</head>
+<body>
+
+    <div class="" style="position: relative;">
+        <div class="logo">
+
+            <img src="~/images/logo (1).png" />
+        </div>
+        <img src="~/images/—Pngtree—business background white-collar jobs_216619.jpg" class="img-fluid" />
+
+
+    </div>
+    <br />
+    <div class="container-fluid p-3">
+        <div class="row">
+
+            <div class="col-12">
+                <br />
+                <h1 id="demo"></h1>
+                <br />
+            </div>
+
+            <br />
+            <div class="col-md-5 col-12">
+
+
+
+                <div class="text-left">
+                    <img src="~/images/art.png" alt="art" class="img-fluid" />
+                </div>
+            </div>
+
+            <br />
+            <div class="col-md-4 col-12 p-sm-3 p-xs-3" style="background: #fff;box-shadow:0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);padding:1rem; margin-top:50px">
+                @using (Html.BeginForm("registrationnew", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <h3 style="color:#001b40">Student Details</h3>
+                    <div class="text-center">
+                        <p style="color:green"> @ViewBag.message</p>
+                        @*<input type="submit" value="Register" id="Submitt" class="btn" style="  background-color: #044092; color: #ffffff; margin-top: 20px; min-width: 60%; border-radius: 0; padding: 8px; font-size: 18pt;outline: none; border: none; border-radius: 8px; text-transform: uppercase;"/>*@
+                    </div>
+
+
+
+                    @Html.HiddenFor(model => model.url, htmlAttributes: new { @class = "control-label", @id = "docId" })
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-controls" } })
+                            @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger " })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Mobilenumber, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.Mobilenumber, new { htmlAttributes = new { @class = "form-controls" } })
+                            @Html.ValidationMessageFor(model => model.Mobilenumber, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.collegeName, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.collegeName, new { htmlAttributes = new { @class = "form-controls" } })
+                            @Html.ValidationMessageFor(model => model.collegeName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.workemail, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.workemail, new { htmlAttributes = new { @class = "form-controls" } })
+                            @Html.ValidationMessageFor(model => model.workemail, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.location, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.location, new { htmlAttributes = new { @class = "form-controls" } })
+                            @Html.ValidationMessageFor(model => model.location, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.department, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <div class="col-md-12">
+                            @Html.DropDownListFor(model => model.department, new SelectList(ViewBag.customValue, "Text", "Value"), "Please select", new { htmlAttributes = new { @class = "form-controls" } })
+                            @Html.ValidationMessageFor(model => model.department, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.year, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <div class="col-md-12">
+                            @Html.DropDownListFor(model => model.year, new SelectList(ViewBag.years, "Text", "Value"), "Please select", new { htmlAttributes = new { @class = "form-controls" } })
+                            @Html.ValidationMessageFor(model => model.year, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.files, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            <input type="file" name="files" required />
+                            @Html.ValidationMessageFor(model => model.files, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    if (ViewBag.ResultErrorMessage != null && ViewBag.ResultErrorMessage != "Your Application Successfully Registered")
+                    {
+                        <script type="text/javascript">
+
+                            window.onload = function () {
+                                sweetAlert("@ViewBag.ResultErrorMessage", "Please Select Valid file", "error");
+                            @*alert("@ViewBag.ResultErrorMessage");*@
+                };
+
+                        </script>
+
+                    }
+
+
+                    if (ViewBag.ResultErrorMessage != null && ViewBag.ResultErrorMessage == "Your Application Successfully Registered")
+                    {
+                        <script type="text/javascript">
+
+                            window.onload = function () {
+                                sweetAlert("@ViewBag.ResultErrorMessage", "", "success");
+                            @*alert("@ViewBag.ResultErrorMessage");*@
+                };
+
+                        </script>
+
+                    }
+
+                    <div class="form-group col-md-12">
+                        <div>
+                            <input type="submit" id="Submitt" value="Submit" class="btn" style="  background-color: #044092; color: #ffffff; margin-top: 20px; min-width: 60%; border-radius: 0; padding: 8px; font-size: 18pt;outline: none; border: none; border-radius: 8px; text-transform: uppercase;" />
+                        </div>
+                    </div>
+
+
+                }
+
+            </div>
+            <p style="font-style: italic;margin-top:10px;">“Dream the grandest, most splendid vision possible you can achieve – because you become what you believe. If your dreams don’t scare you, they are not BIG ENOUGH!”.</p>
+        </div>
+    </div>
+    <br />
+    <br />
+
+    @*<script>
+        // Set the date we're counting down to
+        var countDownDate = new Date("January 23, 2022 14:00:00").getTime();
+
+        // Update the count down every 1 second
+        var x = setInterval(function () {
+
+            // Get today's date and time
+            var now = new Date().getTime();
+
+            // Find the distance between now and the count down date
+            var distance = countDownDate - now;
+
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Display the result in the element with id="demo"
+            document.getElementById("demo").innerHTML = "<div>" + "<span>" + "0" + days + "</span>" + "<span>" + hours + "</span>" + "<span>"
+                + minutes + "</span>" + "<span>" + seconds + "</span>" + "</div>";
+
+            // If the count down is finished, write some text
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("demo").innerHTML = "EXPIRED";
+            }
+        }, 1000);
+
+
+
+    </script>*@
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval");
+       
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+       
+
+    }
+</body>
+</html>
+

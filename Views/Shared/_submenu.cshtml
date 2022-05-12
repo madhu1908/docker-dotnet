@@ -1,0 +1,19 @@
+﻿<style>
+    /* table {
+            table-layout: fixed;
+            word-wrap: break-word;
+        }*/
+    .bg {
+        color: #11145b !important;
+        font-weight: 600;
+    }
+</style>
+<a class="mx-3 @(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active text-white bg " : "")" href="@Url.Action("Index","Home")">Rapid Data</a>
+@if (Convert.ToBoolean((Session["RoleName"].ToString()) == "SuperAdmin"))
+{<a class="mx-3 @(ViewContext.RouteData.Values["Action"].ToString() == "RejectIndex" ? "active text-white bg" : "")" href="@Url.Action("RejectIndex", "Home")">Rejected Resumes</a>
+    <a class="mx-3 @(ViewContext.RouteData.Values["Action"].ToString() == "SelectedIndex" ? "active text-white bg " : "")" href="@Url.Action("SelectedIndex", "Home")">Selected Resumes</a>
+    <a class="mx-3 @(ViewContext.RouteData.Values["Action"].ToString() == "scheduledIndex" ? "active text-white bg " : "")" href="@Url.Action("scheduledIndex", "Home")">Interview Scheduled</a>
+    <a class="mx-3 @(ViewContext.RouteData.Values["Action"].ToString() == "interviewSelected_canditates" ? "active text-white bg " : "")" href="@Url.Action("interviewSelected_canditates", "Home")">Selected Candidates</a>
+    <a class="mx-3 @(ViewContext.RouteData.Values["Action"].ToString() == "interviewRejected_canditates" ? "active text-white bg " : "")" href="@Url.Action("interviewRejected_canditates", "Home")">Rejected Candidates</a>
+    <a class="mx-3 @(ViewContext.RouteData.Values["Action"].ToString() == "orgtree" ? "active text-white bg " : "")" href="@Url.Action("orgtree", "Admin")">tree</a>
+}

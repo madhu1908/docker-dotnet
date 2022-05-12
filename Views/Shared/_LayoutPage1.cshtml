@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @*<title>@ViewBag.Title - My ASP.NET Application</title>*@
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Scripts/StyleSheet2.css" rel="stylesheet" />
+    <title>@ViewBag.Title</title>
+    <script>
+        $(document).ready(function () {
+            var trigger = $('.hamburger'),
+                overlay = $('.overlay'),
+                isClosed = false;
+
+            trigger.click(function () {
+                hamburger_cross();
+            });
+
+            function hamburger_cross() {
+
+                if (isClosed == true) {
+                    overlay.hide();
+                    trigger.removeClass('is-open');
+                    trigger.addClass('is-closed');
+                    isClosed = false;
+                } else {
+                    overlay.show();
+                    trigger.removeClass('is-closed');
+                    trigger.addClass('is-open');
+                    isClosed = true;
+                }
+            }
+
+            $('[data-toggle="offcanvas"]').click(function () {
+                $('#wrapper').toggleClass('toggled');
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <div id="wrapper">
+        <div class="overlay"></div>
+
+        <!-- Sidebar -->
+        <nav class="navbar navbar-inverse fixed-top" id="sidebar-wrapper" role="navigation">
+            <ul class="nav sidebar-nav">
+                <div class="sidebar-header">
+                    <div class="sidebar-brand">
+                        <a href="" class="bg-white p-2">
+                            <img  src="~/images/logo (1).png" /> 
+                        </a>
+                    </div>
+                </div>
+                <li><a href="@Url.Action("Index","Admin")">Home</a></li>
+                <li><a href="@Url.Action("departIndexpage","Admin")"> Departments</a></li>
+                <li><a href="@Url.Action("roleIndexpage","Admin")">Roles</a></li>
+                <li><a href="@Url.Action("PassedOutIndexpage","Admin")">Year of passedout</a></li>
+                <li><a href="@Url.Action("Index","Home")">Candidate Records</a></li>
+                <li><a href="@Url.Action("Logoff","Admin")">Log Out</a></li>
+                @if (Convert.ToBoolean((Session["RoleName"].ToString()) == "SuperAdmin"))
+                {
+                    <li class="dropdown">
+                        <a href="#services" class="dropdown-toggle" data-toggle="dropdown">SetUp<span class="caret"></span></a>
+                        <ul class="dropdown-menu animated fadeInLeft" role="menu">
+
+                            <li><a href="@Url.Action("createOrEditDepartment","Admin")">Add Departments</a></li>
+                            <li><a href="@Url.Action("createOrEditpassedoutyear","Admin")">Add Year Of PassedOut</a></li>
+                            <li><a href="@Url.Action("CreateorEditRole","Admin")">Add Roles</a></li>
+                            <li><a href="@Url.Action("createEmployeorEdit","Admin")">Add Employee</a></li>
+
+
+                        </ul>
+                    </li>
+                }
+
+
+            </ul>
+        </nav>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
+                <span class="hamb-top"></span>
+                <span class="hamb-middle"></span>
+                <span class="hamb-bottom"></span>
+            </button>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-lg-offset-2">
+                        @RenderBody()
+                    </div>
+                    <footer style="background-color: #002d79; color: #ffffff;text-align:center;width:100%">
+
+                        <ul class="blink_me" style="list-style-type: none; font-size: 28pt; display: flex;justify-content: center;margin-top:20px">
+                            <li style="margin-right: 20px;"><a title="RapidData" href="https://www.rapiddatatech.com/" style="color: #fff;">RapidData</a></li>
+
+
+                        </ul>
+                        <h4 style="font-style:italic;text-decoration:underline;">Follow us</h4>
+                        <ul style="list-style-type:none; padding-left:0;display:flex;justify-content:center;font-size:28pt">
+                            <li style="width:70px"><a style="color: #0e57eb; background-color: #ffffff; padding: 5px 13px 7px 13px; border-radius: 35px;" href="https://www.facebook.com/RapidData-Technologies-101137391304582/"><i class="fa fa-facebook-square"></i></a></li>
+                            <li style="width:70px"><a style="color:  #0077b5; background-color: #ffffff; padding: 5px 13px 7px 13px; border-radius: 35px;" href="https://www.linkedin.com/company/rapiddata-technologies/mycompany/"><i class="fa fa-linkedin-square"></i></a></li>
+                            <li style="width:70px"><a style="color: #00acee; background-color: #ffffff; padding: 5px 13px 7px 13px; border-radius: 35px;" href="https://twitter.com/rapiddatat?lang=en"><i class="fa fa-twitter"></i></a></li>
+                            <li style="width:70px"><a style="color: #c4302b; background-color: #ffffff; padding: 5px 13px 7px 13px; border-radius: 35px;" href="https://www.youtube.com/channel/UCqWwweYpkBaRG8W9y3w-Hlg"><i class="fa fa-youtube"></i></a></li>
+                        </ul>
+
+                        <p style="margin-bottom:0px; padding-bottom:20px">&copy; @DateTime.Now.Year - RapidData</p>
+                    </footer>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

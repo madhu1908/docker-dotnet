@@ -1,0 +1,502 @@
+﻿@{
+    ViewBag.Title = "Employee List";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<h2>Candidates Database</h2>
+<div class="breadcrumb flat">
+    <a href="#" style="cursor: default">
+        <em class="fa fa-home"></em>
+    </a>
+
+    @Html.Partial("~/Views/Shared/_submenu.cshtml")
+</div>
+
+<div class="panel panel-default">
+
+    <br />
+
+    <br /><br />
+
+    @if (Convert.ToBoolean((Session["RoleName"].ToString()) == "SuperAdmin"))
+    {<span id="excBound"></span>
+        <span id="excBound2"></span>
+        <span id="excBound1"></span><br /><br />
+    }
+    <table id="employeeTable" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <td>
+                    @if (Convert.ToBoolean((Session["RoleName"].ToString()) == "SuperAdmin"))
+                    {<input type="checkbox" id="checkAll" onclick="checkAll()" />}
+                </td>
+                @*<th></th>*@
+                <th>Names</th>
+                <th>Email</th>
+                <th>Mobile Number</th>
+                <th>College Name</th>
+                <th>Department</th>
+                <th>Location</th>
+                <th>Year</th>
+                <th>Resume</th>
+                <th>Applied On</th>
+                <th>Action</th>
+               
+
+            </tr>
+        </thead>
+    </table>
+
+    <hr />
+    @*<p>Press <b>Submit</b> and check console for URL-encoded form data that would be submitted.</p>
+
+        <p><button>Submit</button></p>*@
+
+</div>
+
+@*<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">*@
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<style>
+   /* table {
+        table-layout: fixed;
+        word-wrap: break-word;
+    }*/
+    .bg {
+        color: #11145b !important;
+        font-weight: 600;
+    }
+</style>
+
+@section scripts{
+
+    <script src="~/Scripts/jquery.js"></script>
+    <script src="~/Scripts/jquerydatatable.js"></script>
+    <script src="~/Scripts/dataTables.buttons.min.js"></script>
+    <script src="~/Scripts/jszip.min.js"></script>
+    <script src="~/Scripts/pdfmake.min.js"></script>
+    <script src="~/Scripts/vfs_fonts.js"></script>
+    <script src="~/Scripts/buttons.html5.min.js"></script>
+    <script src="~/Scripts/buttons.print.min.js"></script>
+    <script href="https://cdn.datatables.net/buttons/2.2.2/js/buttons.colVis.min.js"></script>
+
+
+
+    <script type="text/javascript" language="javascript">
+        function DisableBackButton() {
+            window.history.forward()
+        }
+        DisableBackButton();
+        window.onload = DisableBackButton;
+        window.onpageshow = function (evt) { if (evt.persisted) DisableBackButton() }
+        window.onunload = function () { void (0) }
+    </script>
+    <script>
+
+            var Popup, dataTable;
+            $(document).ready(function () {
+                debugger;
+                var theStatusV = $("#theStatus").val();
+                var empNameV = $("#Employee").val();
+                var locaV = $("#Location").val();
+                var departV = $("#Department").val();
+                var DataBody = {
+                    Status: theStatusV,
+                    name: empNameV,
+                    location: locaV,
+                    department: departV
+                };
+                dataTable = $("#employeeTable").DataTable({
+                    "scrollX": true,
+
+
+                    "ajax": {
+                        "url": "/Home/getregisterdetails",
+                        "type": "GET",
+                        "datatype": "json",
+                        /*"data": DataBody*/
+
+
+                    },
+
+
+                    "columns": [
+                        {
+
+                            "data": "employeeid",
+                            "defaultContent": "",
+                            "render": function (data, type, row, meta) {
+
+                                  rolename = row["rolename"];
+                            if (rolename == 'SuperAdmin') {
+                              return '<td> @if (Convert.ToBoolean((Session["RoleName"].ToString()) == "SuperAdmin")){<input type="checkbox" style="margin-left:7px;" class="checkBoxClass" id="checkbox'+data+'" name="datarows" value='+data+' onclick="getCheckedData()" />}</td>'
+                            } else {
+                                dataTable.columns([0]).visible(false);
+                            }
+
+                                @*return '<td> @if (Convert.ToBoolean((Session["RoleName"].ToString()) == "SuperAdmin")){<input type="checkbox" style="margin-left:7px;" class="checkBoxClass" id="checkbox'+data+'" name="datarows" value='+data+' onclick="getCheckedData()" />}</td>'*@
+                            }
+                        },
+
+
+                        { "data": "name" },
+                        { "data": "workemail" },
+                        { "data": "Mobilenumber" },
+                        { "data": "collegeName" },
+                        { "data": "department" },
+                        {
+                            "data": "location",
+                            "render": function (data) {
+                                return data
+                            },
+
+                        },
+                        { "data": "year" },
+                        {
+                            "data": "url",
+                            "defaultContent": "",
+                            "render": function (data, type, row) {
+                                 rolename = row["rolename"];
+                            if (rolename == 'SuperAdmin') {
+                                return ' @if (Convert.ToBoolean((Session["RoleName"].ToString()) == "SuperAdmin")){<a id="lnk" class="btn btn-info " style="white-space:no-wrap" role="button" href=' + data +' target="_blank">View Resume </a>}'
+                            } else {
+                                dataTable.columns([8]).visible(false);
+                            }
+
+                            },
+
+                        },
+                        {
+                            "data": "applieddate",
+                            "render": function (data) {
+                                var startDate = moment(data).format('YYYY-MM-DD');
+                                return startDate;
+                            }
+
+                        },
+
+                        {
+                            "data": "employeeid",
+                            "defaultContent": "",
+                            "render": function (data, type, row) {
+
+                                 rolename = row["rolename"];
+                            if (rolename == 'SuperAdmin') {
+                                return "@if (Convert.ToBoolean((Session["RoleName"].ToString()) == "SuperAdmin")){<span class='d-flex'><a class='btn btn-success btn-sm mx-1' onclick=Select(" + data + ")> Select </a><a class='btn btn-danger btn-sm mx-1'   onclick=Reject(" + data +")> Reject </a></span>}";
+                            } else {
+                                dataTable.columns([10]).visible(false);
+                            }
+
+                        },
+                            "orderable": false,
+                            "searchable": false,
+                           
+
+
+                        },
+
+                        
+
+
+                    ],
+
+                    "dom": 'Bfrtip',
+                    "lengthMenu": [[50, 100,200, 250, 500], [50, 100,200, 250, 500]],
+                    "buttons": [
+
+                        {
+                            "extend": 'excelHtml5',
+                            "text": "Export To Excel",
+                            "exportOptions": {
+                                "exportOptions": [0, ':visible'],
+                                "columns": [0, 1, 2, 3, 4, 5, 6,7],
+                                "text": "Candidate Report"
+
+                            }
+                        },
+
+                    ],
+
+                    'columnDefs': [
+                        {
+                            "targets": [0],
+
+                            "searchable": true
+                        },
+
+                        {
+                            "targets": [1],
+                            "visible": true,
+                            "searchable": true
+                        },
+                        {
+                            "targets": [2],
+                            "visible": true,
+                            "searchable": true
+                        },
+                        {
+                            "targets": [3],
+                            "visible": true,
+                            "searchable": true
+                        },
+                        {
+                            "targets": [4],
+                            "visible": true,
+                            "searchable": true
+                        }
+                        ,
+                        {
+                            "targets": [5],
+                            "visible": true,
+                            "searchable": true
+                        }
+                        ,
+                        {
+                            "targets": [6],
+                            "visible": true,
+                            "searchable": true
+                        },
+                        {
+                            "targets": [7],
+                            "visible": true,
+                            "searchable": true
+
+                        },
+                        {
+                            "targets": [8],
+
+                            "searchable": true
+                        },
+                        {
+                            "targets": [9],
+
+                            "searchable": true
+                        },
+                        
+
+                    ],
+                    //'select': {
+                    //    'style': 'multi'
+                    //},
+                    //'order': [[1, 'asc']],
+
+                    "language": {
+
+                        "emptyTable" : "No data found!!!"
+                    }
+                });
+            });
+
+            function Reject(id) {
+                if (confirm('Are You Sure to Reject this Resume ?'))
+                {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Reject","Home")/' + id,
+                        success: function (data) {
+                            if (data.success)
+                            {
+                                dataTable.ajax.reload();
+
+                                $.notify(data.message, {
+                                    globalPosition: "top center",
+                                    className: "success"
+                                })
+
+                            }
+                        }
+
+                    });
+                }
+            }
+
+
+
+
+            function Select(id) {
+                if (confirm('Are You Sure to Select this Resume ?'))
+                {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Select","Home")/' + id,
+                        success: function (data) {
+                            if (data.success)
+                            {
+                                dataTable.ajax.reload();
+
+                                $.notify(data.message, {
+                                    globalPosition: "top center",
+                                    className: "success"
+                                })
+
+                            }
+                        }
+
+                    });
+                }
+                    }
+
+
+                    $(document).ready(function () {
+                        $("#checkAll").click(function () {
+                            if (this.checked) {
+                                $('.checkBoxClass').each(function () {
+                                    $(".checkBoxClass").prop('checked', true);
+                                    getCheckedData();
+                                })
+                            } else {
+                                $('.checkBoxClass').each(function () {
+                                    $(".checkBoxClass").prop('checked', false);
+                                })
+                                var deleteAll = document.getElementById("deleteAll");
+                                var SelectAll = document.getElementById("SelectAll");
+                               // var exports = document.getElementById("Excle");
+                                deleteAll.remove();
+                                SelectAll.remove();
+                                //exports.remove();
+                            }
+                        });
+                    });
+
+                    function getCheckedData() {
+                        var exclude = document.getElementById("excBound");
+                        var exclude1 = document.getElementById("excBound1");
+
+                        var flag = 0;
+                        if (exclude.hasChildNodes() && exclude1.hasChildNodes()) {
+                            flag = 1;
+                        }
+                        else {
+                            var exc = document.createElement('button');
+                            exc.setAttribute('class', 'btn btn-danger btn-lg');
+                            exc.setAttribute('id', 'deleteAll');
+                            exc.setAttribute('onclick', 'excluderejectitems()');
+                            exc.setAttribute('style', 'margin-left:5px');
+                            exc.innerHTML = "Reject";
+                            excBound.appendChild(exc);
+
+                            var exc1 = document.createElement('button');
+                            exc1.setAttribute('class', 'btn btn-success btn-lg');
+                            exc1.setAttribute('id', 'SelectAll');
+                            exc1.setAttribute('onclick', 'excludeselectitems()');
+                            exc1.innerHTML = "Select";
+                            excBound1.appendChild(exc1);
+
+
+                            //var exc2 = document.createElement('button');
+                            //exc2.setAttribute('class', 'btn btn-success btn-lg');
+                            //exc2.setAttribute('id', 'Excle');
+                            //exc2.setAttribute('onclick', 'exceldownload()');
+                            //exc2.innerHTML = "Export To Excel";
+                            //excBound2.appendChild(exc2);
+                        }
+                    }
+
+                    function excluderejectitems() {
+                        if (confirm('Are You Sure to Select this Employee Record ?')) {
+                            var array = [];
+                            $.each($("input[name='datarows']:checked"), function () {
+                                array.push($(this).val());
+                            });
+                            $.ajax({
+                                url: "/home/rejectitems",
+                                method: "post",
+                                dataType: "json",
+                                data: { esid: array },
+                                success: function (data) {
+                                    if (data.success) {
+                                        dataTable.ajax.reload();
+
+                                        $.notify(data.message, {
+                                            globalPosition: "top center",
+                                            className: "success"
+                                        })
+
+                                    }
+                                }
+                            });
+                        }
+
+                    }
+
+
+                    function excludeselectitems() {
+                        if (confirm('Are You Sure to Select this Employee Record ?')) {
+                            var array = [];
+                            $.each($("input[name='datarows']:checked"), function () {
+                                array.push($(this).val());
+                            });
+                            $.ajax({
+                                url: "/home/selectitems",
+                                method: "post",
+                                dataType: "json",
+                                data: { esid: array },
+                                success: function (data) {
+                                    if (data.success) {
+                                        dataTable.ajax.reload();
+
+                                        $.notify(data.message, {
+                                            globalPosition: "top center",
+                                            className: "success"
+                                        })
+
+                                    }
+                                }
+                            });
+                        }
+
+                    }
+
+
+
+                    function exceldownload() {
+                        debugger;
+                        if (confirm('Are You Sure want to download ?')) {
+                            var array = [];
+                            $.each($("input[name='datarows']:checked"), function () {
+                                array.push($(this).val());
+                            });
+                            $.ajax({
+                                url: "/home/fileexport",
+                                method: "post",
+                                dataType: "json",
+                                data: { esid: array },
+                                success: function (data) {
+                                    debugger;
+                                    if (data.success) {
+                                        dataTable.ajax.reload();
+
+                                        $.notify(data.message, {
+                                            globalPosition: "top center",
+                                            className: "success"
+                                        })
+
+                                    }
+                                }
+                            });
+                        }
+
+                    }
+
+
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

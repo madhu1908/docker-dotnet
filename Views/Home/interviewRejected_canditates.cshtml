@@ -1,0 +1,221 @@
+﻿
+@{
+    ViewBag.Title = "interviewRejected_canditates";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+@{
+    ViewBag.Title = "interviewSelected_canditates";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<div class="breadcrumb flat">
+    <a class="mx-1" href="#" style="cursor: default">
+        <em class="fa fa-home"></em>
+    </a>
+
+
+    @Html.Partial("~/Views/Shared/_submenu.cshtml")
+</div>
+<style>
+    table {
+        table-layout: fixed;
+        word-wrap: break-word;
+    }
+</style>
+<div class="panel panel-default">
+
+
+    <table id="employeeTable" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                
+                <th>Names</th>
+                <th>Email</th>
+                <th>Mobile Number</th>
+                <th>College Name</th>
+                <th>Department</th>
+                <th>Location</th>
+                <th>Year</th>
+                @if (Convert.ToBoolean((Session["RoleName"].ToString()) == "SuperAdmin"))
+                {
+                    <th>Resume</th>
+                }
+                <th>Interview Status</th>
+               
+            </tr>
+        </thead>
+    </table>
+
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+
+    @section scripts{
+        <script src="~/Scripts/jquery.js"></script>
+        <script src="~/Scripts/jquerydatatable.js"></script>
+        <script src="~/Scripts/dataTables.buttons.min.js"></script>
+        <script src="~/Scripts/jszip.min.js"></script>
+        <script src="~/Scripts/pdfmake.min.js"></script>
+        <script src="~/Scripts/vfs_fonts.js"></script>
+        <script src="~/Scripts/buttons.html5.min.js"></script>
+        <script src="~/Scripts/buttons.print.min.js"></script>
+        <script href="https://cdn.datatables.net/buttons/2.2.2/js/buttons.colVis.min.js"></script>
+
+
+
+
+
+        <script>
+
+                var Popup, dataTable;
+                $(document).ready(function () {
+                    debugger;
+                    var theStatusV = $("#theStatus").val();
+                    var empNameV = $("#Employee").val();
+                    var locaV = $("#Location").val();
+                    var departV = $("#Department").val();
+                    var DataBody = {
+                        Status: theStatusV,
+                        name: empNameV,
+                        location: locaV,
+                        department: departV
+                    };
+                    dataTable = $("#employeeTable").DataTable({
+
+
+                        "ajax": {
+                            "url": "/Home/interviewRejected_List",
+                            "type": "GET",
+                            "datatype": "json",
+                            
+
+                        },
+
+                        "dom": 'Bfrtip',
+                        "lengthMenu": [[100, 200, 250, 500], [100, 200, 250, 500]],
+                        "buttons": [
+
+                            {
+                                "extend": 'excelHtml5',
+                                "text": "Export To Excel",
+                                "exportOptions": {
+                                    "exportOptions": [0, ':visible'],
+                                    "columns": [0, 1, 2, 3, 4, 5, 6, 7],
+                                    "filename": 'Candidate Report'
+                                }
+                            },
+
+                        ],
+
+                        "columns": [
+                           
+                            { "data": "name" },
+                            { "data": "workemail" },
+                            { "data": "Mobilenumber" },
+                            { "data": "collegeName" },
+                            { "data": "department" },
+                            { "data": "location" },
+                            { "data": "year" },
+                            {
+                                "data": "url",
+                                "render": function (data, type, row) {
+
+                                    return ' @if (Convert.ToBoolean((Session["RoleName"].ToString()) == "SuperAdmin")){<a id="lnk" class="btn btn-info" role="button" href=' + data + ' target="_blank">View Resume </a>}'
+
+
+                                }
+                            },
+                            {
+                                "data": "status",
+                                "render": function (data) {
+                                    if (data == "interview Rejected canditates") {
+                                        return "Rejected";
+                                    }
+                                }
+                            }
+
+                           
+
+                        ],
+
+                        'columnDefs': [
+                            {
+                                "targets": [0],
+                                "visible": true,
+                                "searchable": true
+                            },
+                            {
+                                "targets": [1],
+                                "visible": true,
+                                "searchable": true
+                            },
+                            {
+                                "targets": [2],
+                                "visible": true,
+                                "searchable": true
+                            },
+                            {
+                                "targets": [3],
+                                "visible": true,
+                                "searchable": true
+                            },
+                            {
+                                "targets": [4],
+                                "visible": true,
+                                "searchable": true
+                            }
+                            ,
+                            {
+                                "targets": [5],
+                                "visible": true,
+                                "searchable": true
+                            }
+                            ,
+                            {
+                                "targets": [6],
+                                "visible": true,
+                                "searchable": true
+                            },
+                            {
+                                "targets": [7],
+                                "visible": true,
+                                "searchable": true
+
+                            },
+                            {
+                                "targets": [8],
+                                "visible": true,
+                                "searchable": true
+                            }
+                            
+
+                        ],
+                        "language": {
+
+                            "emptyTable": "No data found!!!"
+                        }
+                    });
+                });
+
+        </script>
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
